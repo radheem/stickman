@@ -1,0 +1,152 @@
+/* Full-viewport, no-scroll shell. The canvas owns the screen; the page is just
+   the letterbox backdrop. Touch behaviours that would fight the game (scroll,
+   pull-to-refresh, double-tap zoom) are disabled. */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  overscroll-behavior: none;
+}
+
+body {
+  /* No double-tap zoom (we use double-tap for double-jump), no scroll, no select. */
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none; /* no iOS long-press callout */
+}
+
+#game {
+  display: block;
+  /* Sized in JS to the viewport; centered field is handled by letterbox draw. */
+}
+
+/* ── In-game control buttons (monochrome) ── */
+.hidden { display: none !important; }
+
+.game-btn {
+  font-family: monospace;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #fff;
+  background: #000;
+  border: 3px solid #000;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.game-btn:active { background: #fff; color: #000; }
+
+/* Top-left pause button during play (respects notch safe-area). */
+#pauseBtn.corner {
+  position: fixed;
+  top: calc(12px + env(safe-area-inset-top));
+  left: calc(12px + env(safe-area-inset-left));
+  padding: 10px 14px;
+  font-size: 14px;
+  line-height: 1;
+  z-index: 12;
+}
+
+/* Bottom-center menu (Resume / Restart / Home) for paused / game-over.
+   The strip itself is click-through; only the buttons capture taps, so tapping
+   the empty area during Game Over still restarts (canvas tap-anywhere). */
+#menu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  z-index: 12;
+  pointer-events: none;
+}
+#menu .game-btn { pointer-events: auto; }
+#menu .game-btn {
+  min-width: 120px;
+  padding: 12px 18px;
+  font-size: 16px;
+}
+
+/* ── Start overlay: name entry (monochrome, matches the game) ── */
+#startOverlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  z-index: 20;
+}
+
+#startOverlay .card {
+  text-align: center;
+  color: #000;
+  font-family: monospace;
+  padding: 24px;
+  max-width: 90vw;
+}
+
+#startOverlay h1 {
+  font-size: clamp(24px, 6vw, 40px);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+}
+
+#startOverlay .sub {
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+#startOverlay .hint {
+  font-size: 12px;
+  margin-top: 18px;
+  opacity: 0.7;
+}
+
+#nameInput {
+  display: block;
+  width: 260px;
+  max-width: 80vw;
+  margin: 0 auto 14px;
+  padding: 12px 14px;
+  font-family: monospace;
+  font-size: 18px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #000;
+  background: #fff;
+  border: 3px solid #000;
+  border-radius: 0;
+  outline: none;
+}
+
+#playBtn {
+  display: block;
+  width: 260px;
+  max-width: 80vw;
+  margin: 0 auto;
+  padding: 12px 14px;
+  font-family: monospace;
+  font-size: 20px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #fff;
+  background: #000;
+  border: 3px solid #000;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+#playBtn:active { background: #fff; color: #000; }

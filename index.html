@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>Infinite Stickman</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="game"></canvas>
+
+  <!-- In-game controls (shown/hidden per game state by main.js). -->
+  <button id="pauseBtn" class="game-btn corner hidden" aria-label="Pause">❚❚ PAUSE</button>
+  <div id="menu" class="menu hidden">
+    <button id="resumeBtn" class="game-btn hidden">RESUME</button>
+    <button id="restartBtn" class="game-btn hidden">RESTART</button>
+    <button id="homeBtn" class="game-btn hidden">HOME</button>
+  </div>
+
+  <div id="startOverlay">
+    <div class="card">
+      <h1>INFINITE STICKMAN</h1>
+      <p class="sub">Enter a name for the leaderboard</p>
+      <input id="nameInput" type="text" maxlength="16" placeholder="YOUR NAME"
+             autocomplete="off" autocapitalize="characters" spellcheck="false">
+      <button id="playBtn">PLAY</button>
+      <p class="hint">Space / ↑ / tap to jump &middot; double-tap to double-jump</p>
+    </div>
+  </div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
