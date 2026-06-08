@@ -23,15 +23,26 @@ export const CONFIG = {
   // ── Player physics ──
   GRAVITY: 2200,            // px/s^2
   JUMP_VELOCITY: -780,      // px/s (upward impulse)
+  FASTFALL_MULT: 2.6,       // gravity ×multiplier while Down is held in the air
   COYOTE_TIME: 0.08,        // s, grace to jump just after leaving an edge
   JUMP_BUFFER: 0.08,        // s, grace to register a jump just before landing
+  VARIABLE_JUMP: true,      // tap = short hop, hold = full jump (jump-cut on release)
+  JUMP_CUT_MULT: 0.4,       // upward velocity retained when the jump is released early
 
   PLAYER: {
     X: 150,                 // fixed horizontal position (virtual px)
     W: 26,
-    H: 50,
+    H: 50,                  // standing height
+    DUCK_H: 28,             // ducked height (must clear under OVERHEAD.GAP)
     HITBOX_INSET: 5,        // forgiving: collision box smaller than drawing
     RUN_CADENCE: 0.02,      // running-gait phase speed per px/s of scroll
+  },
+
+  // Overhead obstacle (hangs from the ceiling; must be ducked under, can't be jumped).
+  OVERHEAD: {
+    GAP: 34,                // px of clearance under the bar (ducked height must be < this)
+    W_MIN: 44, W_MAX: 90,
+    MIN_DIFF: 0.45,         // difficulty gate before overheads appear
   },
 
   // ── World / difficulty (uncapped, linear) ──

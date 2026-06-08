@@ -52,10 +52,20 @@ export class Game {
     this.onHome = null;  // () => void — show the name-entry overlay
 
     this.input = new Input(canvas, {
-      onJump: () => this.onTap(),
+      onJumpPress: () => this.onTap(),
+      onJumpRelease: () => this.onJumpRelease(),
       onPause: () => this.togglePause(),
       onHome: () => this.goHome(),
+      onDown: (active) => this.setDown(active),
     });
+  }
+
+  onJumpRelease() {
+    if (this.state === PLAYING) this.player.releaseJump();
+  }
+
+  setDown(active) {
+    this.player.downHeld = !!active && this.state === PLAYING;
   }
 
   _setState(s) {
@@ -98,6 +108,7 @@ export class Game {
   // Stop the run and show the leaderboard (no score submitted — run isn't over).
   pause() {
     if (this.state !== PLAYING) return;
+    this.player.downHeld = false; // don't keep ducking/falling after resume
     this._setState(PAUSED);
     this._refreshLeaderboard(false);
   }
@@ -187,7 +198,7 @@ export class Game {
     this.score = Math.floor(this.world.distance / 10);
 
     const hb = this.player.hitbox();
-    if (this.player.y > CONFIG.VIRTUAL_H + 20 || this.world.collides(hb.x, hb.y, hb.w, hb.h)) {
+    if (this.player.feetY > CONFIG.VIRTUAL_H + 40 || this.world.collides(hb.x, hb.y, hb.w, hb.h)) {
       this.die();
     }
   }
@@ -290,6 +301,10 @@ export class Game {
         ctx.lineTo(o.x + o.w / 2, o.y);
         ctx.closePath();
         ctx.fill();
+      } else if (o.type === 'over') {
+        // Slab hanging from the ceiling; duck under the slot beneath it.
+        ctx.fillRect(o.x, o.y, o.w, o.h);
+        ctx.fillRect(o.x - 4, o.y + o.h - 8, o.w + 8, 8); // bottom lip
       } else {
         ctx.fillRect(o.x, o.y, o.w, o.h);
         // Hint at stacked squares with bg-colored dividers.

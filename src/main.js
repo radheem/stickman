@@ -15,6 +15,7 @@ const overlay = document.getElementById('startOverlay');
 const nameInput = document.getElementById('nameInput');
 const playBtn = document.getElementById('playBtn');
 const pauseBtn = document.getElementById('pauseBtn');
+const downBtn = document.getElementById('downBtn');
 const menu = document.getElementById('menu');
 const resumeBtn = document.getElementById('resumeBtn');
 const restartBtn = document.getElementById('restartBtn');
@@ -25,6 +26,7 @@ const show = (el, visible) => el.classList.toggle('hidden', !visible);
 // Toggle controls to match the current game state.
 function syncControls(state) {
   show(pauseBtn, state === PLAYING);
+  show(downBtn, state === PLAYING);
   const menuOpen = state === PAUSED || state === OVER;
   show(menu, menuOpen);
   show(resumeBtn, state === PAUSED);
@@ -67,6 +69,13 @@ pauseBtn.addEventListener('click', () => game.pause());
 resumeBtn.addEventListener('click', () => game.resume());
 restartBtn.addEventListener('click', () => game.restart());
 homeBtn.addEventListener('click', () => game.goHome());
+
+// Down (duck on ground / fast-fall in air): hold the button (touch/mouse).
+const setDown = (active) => game.setDown(active);
+downBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); setDown(true); });
+downBtn.addEventListener('pointerup', (e) => { e.preventDefault(); setDown(false); });
+downBtn.addEventListener('pointercancel', () => setDown(false));
+downBtn.addEventListener('pointerleave', () => setDown(false));
 
 // ── Mobile robustness ───────────────────────────────────────────────────────
 // Auto-pause when the tab is backgrounded (app switch, lock screen) so the run

@@ -48,6 +48,7 @@ score → restart.
 | --- | --- |
 | Jump | tap / click · `Space` · `↑` |
 | Double jump | second tap/press while airborne |
+| Fast-fall (drop faster) | hold **↓** button · `↓` · `S` |
 | Pause / view leaderboard | **PAUSE** button · `P` |
 | Resume | **RESUME** button · `P` |
 | Restart (after game over) | **RESTART** button · tap anywhere · `Space` |

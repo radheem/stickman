@@ -72,6 +72,17 @@ export class Generator {
       world.addSegment(cursor, lw);
       cursor += lw;
 
+    } else if (type === 'over') {
+      // Overhead bar hanging from the ceiling: duck under it (can't be jumped over).
+      const lead = this.safeRun(speed);
+      const trail = this.safeRun(speed);
+      const ow = r.float(CONFIG.OVERHEAD.W_MIN, CONFIG.OVERHEAD.W_MAX);
+      const w = lead + ow + trail;
+      world.addSegment(cursor, w);
+      const barBottom = groundY - CONFIG.OVERHEAD.GAP; // height of the slab from y=0
+      world.addObstacle(cursor + lead, 0, ow, barBottom, 'over');
+      cursor += w;
+
     } else { // combo: gap, then an obstacle on the landing platform
       const gw = r.float(G.GAP_MIN, this.maxGap(speed) * 0.8);
       cursor += gw;
@@ -94,11 +105,13 @@ export class Generator {
     const wObs = 0.25 + 0.08 * d;
     const wGap = 0.18 + 0.1 * d;
     const wCombo = d > CONFIG.GEN.COMBO_MIN_DIFF ? 0.08 + 0.18 * (d - CONFIG.GEN.COMBO_MIN_DIFF) : 0;
-    const total = wFlat + wObs + wGap + wCombo;
+    const wOver = d > CONFIG.OVERHEAD.MIN_DIFF ? 0.07 + 0.16 * (d - CONFIG.OVERHEAD.MIN_DIFF) : 0;
+    const total = wFlat + wObs + wGap + wCombo + wOver;
     let x = this.rng.next() * total;
     if ((x -= wFlat) < 0) return 'flat';
     if ((x -= wObs) < 0) return 'obstacle';
     if ((x -= wGap) < 0) return 'gap';
-    return 'combo';
+    if ((x -= wCombo) < 0) return 'combo';
+    return 'over';
   }
 }

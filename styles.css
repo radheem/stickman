@@ -58,6 +58,18 @@ body {
   z-index: 12;
 }
 
+/* Bottom-right fast-fall button (hold) during play. Big thumb target. */
+#downBtn.corner-r {
+  position: fixed;
+  right: calc(16px + env(safe-area-inset-right));
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  width: 64px;
+  height: 64px;
+  font-size: 30px;
+  line-height: 1;
+  z-index: 12;
+}
+
 /* Bottom-center menu (Resume / Restart / Home) for paused / game-over.
    The strip itself is click-through; only the buttons capture taps, so tapping
    the empty area during Game Over still restarts (canvas tap-anywhere). */
